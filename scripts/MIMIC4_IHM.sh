@@ -1,5 +1,5 @@
 
-CUDA_VISIBLE_DEVICES=1 python  ../main.py \
+CUDA_VISIBLE_DEVICES=1=0 python  ../main.py \      # 改成绝对路径
     --data mimic4 \
     --modality INTE \
     --batch_size 256 \

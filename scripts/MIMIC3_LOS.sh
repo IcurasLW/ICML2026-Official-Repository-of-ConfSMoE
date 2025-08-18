@@ -1,7 +1,7 @@
 
-CUDA_VISIBLE_DEVICES=0 python ../main.py \    # 改成绝对路径
-    --data mimic4 \
-    --modality INTE \
+CUDA_VISIBLE_DEVICES=0 python ../main.py \  # 改成绝对路径
+    --data mimic3 \
+    --modality IN \
     --batch_size 256 \
     --num_experts 4 \
     --top_k 2 \

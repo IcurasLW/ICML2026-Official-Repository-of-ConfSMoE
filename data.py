@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
 import json
-from ConFSMoE_submission.models import *
+from models import *
 # from torchvision.transforms import Compose, ToTensor, Normalize
 import os
 import argparse

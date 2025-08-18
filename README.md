@@ -2,3 +2,4 @@
 
 Paper Under Review
 
+The implementation adopt an open source MoE framework FastMoE for implementation.

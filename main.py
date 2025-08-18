@@ -8,7 +8,7 @@ from copy import deepcopy
 from tqdm import tqdm, trange
 from utils import seed_everything, setup_logger
 from data import *
-from ConFSMoE_submission.models import ConfSMoE
+from models import ConfSMoE
 import warnings
 import torch.nn.functional as F
 import logging 
@@ -36,12 +36,12 @@ def parse_args():
     parser.add_argument('--task', type=str, default='in-hospital-mortality'), # in-hospital-mortality, phenotyping, length-of-stay##########
     parser.add_argument('--train_epochs', type=int, default=30)
     parser.add_argument('--warm_up_epochs', type=int, default=5)
-    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=3e-4)
     parser.add_argument('--hidden_dim', type=int, default=128)
     parser.add_argument('--top_k', type=int, default=2) # Number of Routers
     parser.add_argument('--num_patches', type=int, default=1) # Number of Patches for Input Token
-    parser.add_argument('--num_experts', type=int, default=4) # Number of Experts
+    parser.add_argument('--num_experts', type=int, default=8) # Number of Experts
     parser.add_argument('--num_layers_enc', type=int, default=1) # Number of MLP layers for encoders
     parser.add_argument('--num_layers_fus', type=int, default=1) # Number of MLP layers for fusion model
     parser.add_argument('--num_layers_pred', type=int, default=1) # Number of MLP layers for prediction head
@@ -57,15 +57,15 @@ def parse_args():
     parser.add_argument('--seq_len', type=int, default=50)
     parser.add_argument('--label', type=int, default=3) #### 2: in-hospital-mortality, 25: phenotyping, 2: length-of-stay
     parser.add_argument('--multilabel', type=bool, default=False) #### True: phenotyping, False: other tasks
-    parser.add_argument('--TokenLevelConf', type=str2bool, default='False')
-    parser.add_argument('--datapath', type=str, default='data/CMU-MOSI/Processed/')
+    parser.add_argument('--TokenLevelConf', type=str2bool, default='True')
+    parser.add_argument('--datapath', type=str, default='/home/nathan/Missing_Modality/Trust_MoE/data/CMU-MOSI/Processed/')
     parser.add_argument('--missing_ratio', type=float, default=0.5)
     parser.add_argument('--experiment_setting', type=str, default='II')
     return parser.parse_known_args()
 
 
 
-def run_epoch(args, train_dataset, loader, encoder_dict, modality_dict, fusion_model, criterion, device, is_train=False, optimizer=None, gate_loss_weight=0.0):
+def run_epoch(args, train_dataset, loader, encoder_dict, modality_dict, fusion_model, criterion, device, is_train=False, optimizer=None):
     all_preds = []
     all_labels = []
     all_probs = []
@@ -169,7 +169,7 @@ def train_and_evaluate(args, seed):
     args.n_full_modalities = len(modality_dict)
     fusion_model = ConfSMoE(args.n_full_modalities, args.seq_len, args.hidden_dim, 
                             args.label, args.num_layers_fus, args.num_layers_pred, args.num_experts, 
-                            args.num_routers, args.top_k, args.num_heads, args.dropout, args.multilabel, TokenLevelConf=args.TokenLevelConf).to(device)
+                            args.top_k, args.num_heads, args.dropout, args.multilabel, TokenLevelConf=args.TokenLevelConf).to(device)
     
     params = list(fusion_model.parameters()) + [param for encoder in encoder_dict.values() for param in encoder.parameters()]
     optimizer = torch.optim.Adam(params, lr=args.lr)
@@ -185,7 +185,7 @@ def train_and_evaluate(args, seed):
         for encoder in encoder_dict.values():
             encoder.train()
             
-        task_losses, exp_count, exp_conf = run_epoch(args, train_dataset, train_loader, encoder_dict, modality_dict, fusion_model, criterion, device, optimizer=optimizer, gate_loss_weight=args.gate_loss_weight, is_train=True)
+        task_losses, exp_count, exp_conf = run_epoch(args, train_dataset, train_loader, encoder_dict, modality_dict, fusion_model, criterion, device, optimizer=optimizer, is_train=True)
         
         ## Validation
         fusion_model.eval()
@@ -235,13 +235,6 @@ def main():
     
     
     seeds = np.arange(args.n_runs) # [0, 1, 2]
-    val_accs = []
-    val_f1s = []
-    val_aucs = []
-    test_accs = []
-    test_f1s = []
-    test_aucs = []
-    
     log_summary = "======================================================================================\n"
     
     model_kwargs = {
@@ -252,7 +245,6 @@ def main():
         "train_epochs": args.train_epochs,
         "warm_up_epochs": args.warm_up_epochs,
         "num_experts": args.num_experts,
-        "num_routers": args.num_routers,
         "top_k": args.top_k,
         "num_layers_enc": args.num_layers_enc,
         "num_layers_fus": args.num_layers_fus,
@@ -262,7 +254,6 @@ def main():
         "batch_size": args.batch_size,
         "hidden_dim": args.hidden_dim,
         "num_patches": args.num_patches,
-        "gate_loss_weight": args.gate_loss_weight,
         "multilable":args.multilabel
     }
 

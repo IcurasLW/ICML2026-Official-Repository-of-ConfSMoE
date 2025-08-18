@@ -3,7 +3,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from ConFSMoE_submission.moe_module import *
+from moe_module import *
 from itertools import combinations
 
 
@@ -82,7 +82,7 @@ class IRG_TS_Encoder(nn.Module):
 
 
 class ConfSMoE(nn.Module):
-    def __init__(self, num_modalities, seq_len, hidden_dim, output_dim, num_layers, num_layers_pred, num_experts, num_routers, top_k, num_heads=2, dropout=0.5, multilabel=False, TokenLevelConf=True):
+    def __init__(self, num_modalities, seq_len, hidden_dim, output_dim, num_layers, num_layers_pred, num_experts, top_k, num_heads=2, dropout=0.5, multilabel=False, TokenLevelConf=True):
         super(ConfSMoE, self).__init__()
         layers = []
         _sparse = True
@@ -335,7 +335,6 @@ class TransformerEncoderLayer(nn.Module):
             for i in range(len(chunk_size)):
                 if imp_sam_idx[i] == None:
                     continue 
-                # BUG: needs to use out-of-place operaction to fix single missing
                 temp = x[i].clone()
                 imput_data_i = self.layer_norm_2(x[i][imp_sam_idx[i]] + imput_data[i])
                 temp[imp_sam_idx[i]] = imput_data_i
