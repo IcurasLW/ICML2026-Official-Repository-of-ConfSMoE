@@ -1,6 +1,6 @@
 # [ICML 2026] Official Repository of ConfSMoE: Handling Missing and Multi-Modal Inputs with Confidence-Guided Sparse Expert Selection
 
-Authors: [Liangwei Nathan Zheng](https://scholar.google.com/citations?user=zgZlJT4AAAAJ&hl=en) (liangwei.zheng@adelaide.edu.au), [Wei Emma Zhang] (https://scholar.google.com/citations?user=NFzUTiEAAAAJ&hl=en) (wei.e.zhang@adelaide.edu.au), [Mingyu Guo](https://scholar.google.com/citations?user=bxEKdzkAAAAJ&hl=en) (mingyu.guo@adelaide.edu.au), [Olaf Maennel](https://scholar.google.com/citations?user=6bw5Ca0AAAAJ&hl=en) (olaf.maennel@adelaide.edu.au), [Weitong Chen](https://scholar.google.com/citations?user=A1o9VOIAAAAJ&hl=en) (weitong.chen@adelaide.edu.au)
+Authors: [Liangwei Nathan Zheng](https://scholar.google.com/citations?user=zgZlJT4AAAAJ&hl=en) (liangwei.zheng@adelaide.edu.au), [Wei Emma Zhang](https://scholar.google.com/citations?user=NFzUTiEAAAAJ&hl=en) (wei.e.zhang@adelaide.edu.au), [Mingyu Guo](https://scholar.google.com/citations?user=bxEKdzkAAAAJ&hl=en) (mingyu.guo@adelaide.edu.au), [Olaf Maennel](https://scholar.google.com/citations?user=6bw5Ca0AAAAJ&hl=en) (olaf.maennel@adelaide.edu.au), [Weitong Chen](https://scholar.google.com/citations?user=A1o9VOIAAAAJ&hl=en) (weitong.chen@adelaide.edu.au)
 
 
 
