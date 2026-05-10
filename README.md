@@ -3,9 +3,19 @@
 Authors: [Liangwei Nathan Zheng](https://scholar.google.com/citations?user=zgZlJT4AAAAJ&hl=en) (liangwei.zheng@adelaide.edu.au), [Wei Emma Zhang](https://scholar.google.com/citations?user=NFzUTiEAAAAJ&hl=en) (wei.e.zhang@adelaide.edu.au), [Mingyu Guo](https://scholar.google.com/citations?user=bxEKdzkAAAAJ&hl=en) (mingyu.guo@adelaide.edu.au), [Olaf Maennel](https://scholar.google.com/citations?user=6bw5Ca0AAAAJ&hl=en) (olaf.maennel@adelaide.edu.au), [Weitong Chen](https://scholar.google.com/citations?user=A1o9VOIAAAAJ&hl=en) (weitong.chen@adelaide.edu.au)
 
 
-
-
 This repository contains only code and all experiment settings for the reproduced purpose. We proposed ConfSMoE, a two-stage missing modality imputation framework with a novel confidence-guided MoE gating mechanism. We evaluated our proposed method in 4 different multimodal datasets under various experimental settings. The raw datasets used in the experiment need to be retrieved since MIMIC-III and MIMIC-IV require ethical checks for all users. While other datasets MOSI and MOSEI are publicly available and easy to retrieve. We will provide the link in the following section. Please see our paper for details.
+
+
+# Motivation 
+
+Our primary motivation stems from the fundamental challenge of handling missing modalities in real-world multimodal learning, where data incompleteness is often inevitable due to sensor failures or collection errors. We observed that existing Sparse Mixture-of-Experts (SMoE) architectures, while powerful, suffer from severe performance degradation in these scenarios because their routing mechanisms are easily misdirected by unreliable imputed features, leading to a "rich-get-richer" feedback loop known as expert collapse. Through rigorous gradient analysis, we uncovered a critical optimization bottleneck: conventional softmax-based routers combined with auxiliary load-balancing losses create conflicting gradient directions, resulting in an ambiguous expert selection pattern that we call a "Sinusoidal Wave". This conflict prevents the model from achieving true expert specialization. To resolve this, we developed ConfSMoE to introduce a two-stage imputation framework that preserves modality-specific structure and a novel confidence-guided gating mechanism that decouples expert selection from softmax-induced sharpness, thereby ensuring robust, diverse, and interpretable multimodal interaction without the need for additional balancing losses.
+
+![motivation](resource/motivation.png)
+
+
+# Overall Framework
+
+![framework](resource/framwork.png)
 
 
 # Datasets Retrieval
